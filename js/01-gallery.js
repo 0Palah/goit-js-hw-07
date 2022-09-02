@@ -30,21 +30,43 @@ const makeGalleryArr = galleryItems.map((el) => {
 
 galleryListEl.insertAdjacentHTML("beforeend", makeGalleryArr.join(""));
 
-// ф-ція для виводу посилання і заборони дефолтного переходу
+// ф-ціяі для заборони дефолтного переходу, виводу посилання на оригынал, модалка
 
 const onImgClick = (evt) => {
+  evt.preventDefault();
+
   const { target } = evt;
   // змінна з посиланням на оригінал
   const outputImgSource = target.dataset.source;
   console.log(outputImgSource);
 
-  evt.preventDefault();
+  const instance = basicLightbox.create(`
+    <img src="${outputImgSource}" width="800" height="600">`);
+
+  instance.show();
+
   return outputImgSource;
+};
+
+//Проблема тут з  const visible = instance.visible();
+
+const isModalOpen = (evt) => {
+  const { code } = evt;
+  console.log(evt);
+  //   const visible = instance.visible();
+  //   if (visible) {
+  //     console.log(visible);
+  //     return;
+  //   }
+  if (code === "Escape") {
+    instance.close();
+  }
 };
 
 // делегація прослуховування
 
 galleryListEl.addEventListener("click", onImgClick);
+galleryListEl.addEventListener("keydown", isModalOpen);
 
 console.log(onImgClick);
 console.log(makeGalleryArr);
