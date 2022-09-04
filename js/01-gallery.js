@@ -3,6 +3,7 @@ import { galleryItems } from "./gallery-items.js";
 
 const galleryListEl = document.querySelector(".gallery");
 
+let instance = null;
 // Розмітка картки
 
 const makeGalleryCard = ({ preview, original, description } = {}) => {
@@ -40,8 +41,10 @@ const onImgClick = (evt) => {
   const outputImgSource = target.dataset.source;
   console.log(outputImgSource);
 
-  const instance = basicLightbox.create(`
-    <img src="${outputImgSource}" width="800" height="600">`);
+  instance = basicLightbox.create(`
+  <div class="modal">
+    <img src="${outputImgSource}" width="800" height="600">
+  </div>`);
 
   instance.show();
 
@@ -53,11 +56,11 @@ const onImgClick = (evt) => {
 const isModalOpen = (evt) => {
   const { code } = evt;
   console.log(evt);
-  //   const visible = instance.visible();
-  //   if (visible) {
-  //     console.log(visible);
-  //     return;
-  //   }
+  const visible = instance.visible();
+  if (!visible) {
+    console.log(visible);
+    return;
+  }
   if (code === "Escape") {
     instance.close();
   }
