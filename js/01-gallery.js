@@ -3,7 +3,6 @@ import { galleryItems } from "./gallery-items.js";
 
 const galleryListEl = document.querySelector(".gallery");
 
-let instance = null;
 // Розмітка картки
 
 const makeGalleryCard = ({ preview, original, description } = {}) => {
@@ -31,46 +30,39 @@ const makeGalleryArr = galleryItems.map((el) => {
 
 galleryListEl.insertAdjacentHTML("beforeend", makeGalleryArr.join(""));
 
+let instance = null;
 // ф-ціяі для заборони дефолтного переходу, виводу посилання на оригынал, модалка
 
-const onImgClick = (evt) => {
+const openModal = (evt) => {
   evt.preventDefault();
 
   const { target } = evt;
+
+  if (target.nodeName !== "IMG") {
+    return;
+  }
   // змінна з посиланням на оригінал
   const outputImgSource = target.dataset.source;
   console.log(outputImgSource);
 
   instance = basicLightbox.create(`
-  <div class="modal">
     <img src="${outputImgSource}" width="800" height="600">
-  </div>`);
-
+    `);
   instance.show();
-
-  return outputImgSource;
+  document.addEventListener("keydown", closeModalEsc);
 };
 
-//Проблема тут з  const visible = instance.visible();
-
-const isModalOpen = (evt) => {
+function closeModalEsc(evt) {
   const { code } = evt;
-  console.log(evt);
-  const visible = instance.visible();
-  if (!visible) {
-    console.log(visible);
-    return;
-  }
+  console.log("closeModalEsc", evt);
   if (code === "Escape") {
     instance.close();
+    document.removeEventListener("keydown", closeModalEsc);
   }
-};
+}
 
-// делегація прослуховування
+galleryListEl.addEventListener("click", openModal);
 
-galleryListEl.addEventListener("click", onImgClick);
-galleryListEl.addEventListener("keydown", isModalOpen);
-
-console.log(onImgClick);
+console.log(openModal);
 console.log(makeGalleryArr);
 console.log(galleryItems);
