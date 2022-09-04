@@ -30,7 +30,7 @@ const makeGalleryArr = galleryItems.map((el) => {
 
 galleryListEl.insertAdjacentHTML("beforeend", makeGalleryArr.join(""));
 
-let instance = null;
+let instance;
 // ф-ціяі для заборони дефолтного переходу, виводу посилання на оригынал, модалка
 
 const openModal = (evt) => {
