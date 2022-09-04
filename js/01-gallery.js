@@ -54,10 +54,13 @@ const openModal = (evt) => {
 
 function closeModalEsc(evt) {
   const { code } = evt;
+  const visible = basicLightbox.visible();
+  if (!visible) {
+    return document.removeEventListener("keydown", closeModalEsc);
+  }
   console.log("closeModalEsc", evt);
   if (code === "Escape") {
     instance.close();
-    document.removeEventListener("keydown", closeModalEsc);
   }
 }
 
